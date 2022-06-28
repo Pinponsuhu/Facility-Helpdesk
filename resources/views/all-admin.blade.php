@@ -28,7 +28,7 @@
                 <ul class="flex flex-col mt-12 gap-y-5">
                     <li class="mb-4 py-3 text-white hover:bg-white hover:text-green-500 w-full"><a href="/admin/dashboard" class="flex flex-col gap-y-2 items-center justify-center"><i class="fa fa-chart-pie  fa-2x"></i><span class="text-md block text-center font-bold">Dashboard</span></a></li>
                     <li class="mb-4 py-3 text-white hover:bg-white hover:text-green-500 w-full"><a href="/admin/request" class="flex flex-col gap-y-2 items-center justify-center"><i class="fa fa-paper-plane fa-2x"></i><span class="text-md block text-center font-bold">Requests</span></a></li>
-                    <li class="mb-4 py-3 text-white hover:bg-white hover:text-green-500 w-full"><a href="/admin/request" class="flex flex-col gap-y-2 items-center justify-center"><i class="fa fa-user-plus fa-2x"></i><span class="text-md block text-center font-bold">Admins</span></a></li>
+                    <li class="mb-4 py-3 text-white hover:bg-white hover:text-green-500 w-full"><a href="/all/admin" class="flex flex-col gap-y-2 items-center justify-center"><i class="fa fa-user-shield fa-2x"></i><span class="text-md block text-center font-bold">Admins</span></a></li>
                     <li class="mb-4 py-3 text-white hover:bg-white hover:text-green-500 w-full"><a href="/logout" class="flex flex-col gap-y-2 items-center justify-center"><i class="fa fa-power-off fa-2x"></i><span class="text-md block text-center font-bold">Logout</span></a></li>
                 </ul>
         </nav>
@@ -38,10 +38,77 @@
                 </section>
                 <div class="bg-white mt-6 rounded-md">
                 <section class="px-10 py-6 text-gray-900">
-                    <div class="">
+                    <div class="flex justify-between items-center">
+                        <h1 class="text-2xl text-green-500 font-bold">All Admins</h1>
+                        <span onclick="openReq()" class="text-white cursor-pointer bg-green-500 py-2.5 px-8 rounded-md font-bold">Add Admin</span>
+                    </div>
+                    <hr class="mt-3">
+                    <div class="mt-6">
+                        @foreach ($admins as $admin)
+                            <div class="mb-3 hover:bg-gray-100 rounded-md px-8 py-3 flex justify-between">
+                                <div>
+                                    <h1 class="text-xl font-bold text-green-500">{{ $admin->surname . ' ' . $admin->othernames }}</h1>
+                                    <p class="text-md text-gray-600 mt-0.5">{{ $admin->email }}</p>
+                                </div>
+                                <div class="flex items-center gap-x-5">
+                                    <a href="" class="text-white block h-11 w-28 text-center font-bold text-md bg-green-500 py-3 px-8 rounded-md">Edit</a>
+                                    <a href="" class="text-white block h-11 w-28 text-center font-bold text-md bg-red-500 py-3 px-8 rounded-md">Delete</a>
+                                </div>
+                            </div>
+                        @endforeach
                     </div>
                 </section>
                 </div>
         </main>
     </body>
+    <div id="new-req" hidden class="fixed overflow-y-scroll top-0 left-0 w-screen h-screen bg-white">
+        <div class="flex items-center px-12 md:px-44 mt-10 justify-between">
+            <h1 class="text-2xl font-bold text-green-500">Add New Admin</h1>
+            <i onclick="clsReq()" class="fa fa-times text-3xl text-green-500"></i>
+        </div>
+        <form action="/add/admin" method="post" class="px-12 grid grid-cols-2 mb-36 gap-x-10 md:px-44 mt-8">
+            @csrf
+            <div>
+                <label for="" class="text-md block mb-2 @error('email') text-red-500  @enderror font-medium">Email Address @error('email')<br> <b>Error:</b> {{ $message }}  @enderror</label>
+            <input value="{{ old('email') }}" type="email" name="email" class="py-4 px-2 border-2 border-black @error('email') border-red-500  @enderror block w-full  mb-4 outline-green-500">
+            </div>
+            <div>
+                <label for="" class="text-md block mb-2 @error('surname') text-red-500  @enderror font-medium">Surname @error('surname')<br> <b>Error:</b> {{ $message }}  @enderror</label>
+            <input value="{{ old('surname') }}" type="text" name="surname" class="py-4 px-2 border-2 @error('surname') border-red-500  @enderror border-black block w-full  mb-4 outline-green-500">
+            </div>
+            <div>
+                <label for="" class="text-md block mb-2 @error('othernames') text-red-500  @enderror font-medium">Othernames @error('othernames')<br> <b>Error:</b> {{ $message }}  @enderror</label>
+            <input value="{{ old('othernames') }}" type="text" name="othernames" class="py-4 px-2 border-2 @error('othernames') border-red-500  @enderror border-black block w-full  mb-4 outline-green-500">
+            </div>
+            <div>
+                <label for="" class="text-md block mb-2 @error('phone') text-red-500  @enderror font-medium">Phone Number @error('phone')<br> <b>Error:</b> {{ $message }}  @enderror</label>
+            <input value="{{ old('phone') }}" type="text" name="phone" class="py-4 px-2 border-2 border-black block w-full @error('phone') border-red-500  @enderror mb-4 outline-green-500">
+            </div>
+            <div>
+                <label for="" class="text-md block mb-2 @error('admin_per') text-red-500  @enderror font-medium">Admin Permission @error('admin_per')<br> <b>Error:</b> {{ $message }}  @enderror</label>
+            <select  name="admin_per" class="py-4 px-2 border-2 border-black block w-full @error('phone') border-red-500  @enderror mb-4 outline-green-500">
+                <option value="" selected disabled>-- Adding Admin Permission --</option>
+                <option value="true">Yes</option>
+                <option value="false">No</option>
+            </select>
+            </div>
+            <div>
+                <label for="" class="text-md block mb-2 @error('password') text-red-500  @enderror font-medium">Password @error('password')<br> <b>Error:</b> {{ $message }}  @enderror</label>
+            <input type="password" name="password" class="py-4 px-2 border-2 border-black block w-full @error('password') border-red-500  @enderror mb-4 outline-green-500">
+            </div>
+            <div>
+                <label for="" class="text-md block mb-2 @error('password') text-red-500  @enderror font-medium">Confirm Password @error('password')<br> <b>Error:</b> {{ $message }}  @enderror</label>
+            <input type="password" name="password_confirmation" class="py-4 px-2 border-2 border-black block w-full @error('password') border-red-500  @enderror mb-4 outline-green-500">
+            </div>
+            <button class="px-8 py-3 w-32 col-span-2 bg-green-500 rounded-md text-white text-medium">Submit</button>
+        </form>
+    </div>
+    <script>
+        function openReq(){
+            document.getElementById('new-req').removeAttribute("hidden");
+        }
+        function clsReq(){
+            document.getElementById('new-req').hidden = true;
+        }
+    </script>
 </html>

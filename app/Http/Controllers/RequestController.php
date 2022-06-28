@@ -7,6 +7,7 @@ use App\Models\RequestReply;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class RequestController extends Controller
 {
@@ -123,6 +124,34 @@ class RequestController extends Controller
         return view('request-two',['reqs' => $reqs]);
 }
 public function all_admin(){
-    $admin = User::where
+    $admins = User::where('is_admin',true)->where('admin_per',false)->get();
+    // dd($admins);
+    return view('all-admin', ['admins'=>$admins]);
+}
+
+public function registering(Request $request){
+    $request->validate([
+        'surname' => 'required',
+        'othernames' => 'required',
+        'admin_per' => 'required',
+        'email' => 'required|unique:users,email',
+        'phone' => 'required|unique:users,phone|numeric|digits:11',
+        'password' => 'required|confirmed',
+    ]);
+    $student = new User;
+    $student->phone = $request->phone;
+    $student->email = $request->email;
+    $student->surname = $request->surname;
+    $student->othernames = $request->othernames;
+    $student->is_admin = true;
+    if($request->admin_per == 'true'){
+        $student->admin_per = true;
+    }else{
+        $student->admin_per = false;
+    }
+    $student->password = Hash::make($request->password);
+    $student->save();
+
+    return back();
 }
 }

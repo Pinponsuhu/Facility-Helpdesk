@@ -28,7 +28,7 @@
                 <ul class="flex flex-col mt-12 gap-y-5">
                     <li class="mb-4 py-3 text-white hover:bg-white hover:text-green-500 w-full"><a href="/admin/dashboard" class="flex flex-col gap-y-2 items-center justify-center"><i class="fa fa-chart-pie  fa-2x"></i><span class="text-md block text-center font-bold">Dashboard</span></a></li>
                     <li class="mb-4 py-3 text-white hover:bg-white hover:text-green-500 w-full"><a href="/admin/request" class="flex flex-col gap-y-2 items-center justify-center"><i class="fa fa-paper-plane fa-2x"></i><span class="text-md block text-center font-bold">Requests</span></a></li>
-                    <li class="mb-4 py-3 text-white hover:bg-white hover:text-green-500 w-full"><a href="/admin/request" class="flex flex-col gap-y-2 items-center justify-center"><i class="fa fa-user-plus fa-2x"></i><span class="text-md block text-center font-bold">Admins</span></a></li>
+                    <li class="mb-4 py-3 text-white hover:bg-white hover:text-green-500 w-full"><a href="/all/admin" class="flex flex-col gap-y-2 items-center justify-center"><i class="fa fa-user-shield fa-2x"></i><span class="text-md block text-center font-bold">Admins</span></a></li>
                     <li class="mb-4 py-3 text-white hover:bg-white hover:text-green-500 w-full"><a href="/logout" class="flex flex-col gap-y-2 items-center justify-center"><i class="fa fa-power-off fa-2x"></i><span class="text-md block text-center font-bold">Logout</span></a></li>
                 </ul>
         </nav>

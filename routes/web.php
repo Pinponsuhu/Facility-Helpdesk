@@ -34,3 +34,5 @@ Route::get('/logout',[RequestController::class, 'logout']);
 Route::get('/admin/dashboard',[RequestController::class, 'admin_dashboard']);
 Route::get('/admin/request',[RequestController::class, 'admin_request_page']);
 Route::get('/admin/request/details/{id}',[RequestController::class, 'req_det_two']);
+Route::get('/all/admin',[RequestController::class, 'all_admin']);
+Route::post('/add/admin',[RequestController::class, 'registering']);
