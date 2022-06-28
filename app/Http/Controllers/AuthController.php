@@ -17,7 +17,11 @@ class AuthController extends Controller
         if(!auth()->attempt($request->only('email','password'),$request->remember_me)){
             return back()->with('msg', 'invalid login credential');
         }else{
-            return redirect('/dashboard');
+            if(auth()->user()->is_admin == false){
+                return redirect('/dashboard');
+            }else{
+                return redirect('/admin/dashboard');
+            }
         }
     }
 }

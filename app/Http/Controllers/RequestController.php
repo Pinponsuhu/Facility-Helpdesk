@@ -4,14 +4,22 @@ namespace App\Http\Controllers;
 
 use App\Models\Request as ModelsRequest;
 use App\Models\RequestReply;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class RequestController extends Controller
 {
     public function dashboard(){
+        if(auth()->user()->is_admin == true){
+            abort(401);
+        }
         return view('dashboard');
     }
     public function request_page(){
+        if(auth()->user()->is_admin == true){
+            abort(401);
+        }
         $reqs = ModelsRequest::where('user_id',auth()->user()->id)->where('status','Active')->paginate(5);
         return view('outbox',['reqs' => $reqs]);
     }
@@ -33,12 +41,29 @@ class RequestController extends Controller
     }
 
     public function req_det($id){
+        if(auth()->user()->is_admin == true){
+            abort(401);
+        }
         $req = ModelsRequest::find($id);
+        // dd($req);
         $replies = RequestReply::where('request_id',$req->id)->get();
+// dd($replies);
         if($req->user_id != auth()->user()->id){
             abort(401);
         }
         return view('request-details',['req'=>$req,'replies' => $replies]);
+    }
+
+    public function req_det_two($id){
+        if(auth()->user()->is_admin == false){
+            abort(401);
+        }
+        $req = ModelsRequest::find($id);
+        // dd($req);
+        $replies = RequestReply::where('request_id',$req->id)->where('sender_id',auth()->user()->id)->get();
+
+
+        return view('request-details-two',['req'=>$req,'replies' => $replies]);
     }
 
     public function reply_request(Request $request){
@@ -64,6 +89,40 @@ class RequestController extends Controller
             $req->status = $request->status;
             $req->save();
         }
-        return redirect('/request/details/' . $request->request_id);
+        if(auth()->user()->is_admin == false){
+            return redirect('/request/details/' . $request->request_id);
+        }
+        return redirect('/admin/request/details/' . $request->request_id);
     }
+
+
+    public function close_request(){
+
+        if(auth()->user()->is_admin == true){
+            abort(401);
+        }
+        $reqs = ModelsRequest::where('user_id',auth()->user()->id)->where('status','Closed')->paginate(5);
+        return view('close',['reqs' => $reqs]);
+    }
+
+    public function logout(){
+        Auth::logout();
+
+        return redirect('/');
+    }
+    public function admin_dashboard(){
+        $active_count = ModelsRequest::where('status','Active')->count();
+        $cls_count = ModelsRequest::where('status','Closed')->count();
+        return view('dashboard-two',['active_count'=> $active_count,'cls_count'=> $cls_count]);
+    }
+    public function admin_request_page(){
+        // if(auth()->user()->is_admin == false){
+        //     abort(401);
+        // }
+        $reqs = ModelsRequest::where('status','Active')->paginate(5);
+        return view('request-two',['reqs' => $reqs]);
+}
+public function all_admin(){
+    $admin = User::where
+}
 }

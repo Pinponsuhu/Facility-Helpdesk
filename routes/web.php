@@ -28,3 +28,9 @@ Route::get('/request',[RequestController::class, 'request_page']);
 Route::get('/request/details/{id}',[RequestController::class, 'req_det']);
 Route::post('/new/request',[RequestController::class, 'new_request']);
 Route::post('/reply/request',[RequestController::class, 'reply_request']);
+Route::get('/close/request',[RequestController::class, 'close_request']);
+Route::get('/logout',[RequestController::class, 'logout']);
+//admin part
+Route::get('/admin/dashboard',[RequestController::class, 'admin_dashboard']);
+Route::get('/admin/request',[RequestController::class, 'admin_request_page']);
+Route::get('/admin/request/details/{id}',[RequestController::class, 'req_det_two']);

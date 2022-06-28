@@ -27,6 +27,7 @@ class RegisterController extends Controller
         $student->surname = $request->surname;
         $student->othernames = $request->othernames;
         $student->is_admin = false;
+        $student->admin_per = false;
         $student->password = Hash::make($request->password);
         $student->save();
 
